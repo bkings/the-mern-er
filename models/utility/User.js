@@ -15,7 +15,7 @@ const schema = new mongoose.Schema({
         required: true
     },
     phone: {
-        type: Number,
+        type: String,
         minlength: 7,
         maxlength: 10
     },
@@ -38,8 +38,9 @@ const validate = user => {
         fullName: Joi.string().required(),
         userName: Joi.string().required(),
         email: Joi.string().required(),
-        phone: Joi.number().min(7).max(10),
-        password: Joi.required()
+        phone: Joi.string().min(7).max(10),
+        password: Joi.required(),
+        status: Joi.string().length(1).required()
     });
     return schema.validate(user);
 }
