@@ -1,14 +1,14 @@
 const express = require('express');
 const router = express.Router();
-const mongoose = require('mongoose');
 const { FiscalYear, validate } = require('../../models/setup/FiscalYear');
+const auth = require('../../middlewares/Authorization');
 
 router.get("/", async (req, res) => {
     const allFiscalYear = await FiscalYear.find();
     res.send(allFiscalYear);
 });
 
-router.post("/", async (req, res) => {
+router.post("/", auth, async (req, res) => {
     const { error } = validate(req.body);
     if (error) return res.status(400).send({ "error": error.details[0].message });
 

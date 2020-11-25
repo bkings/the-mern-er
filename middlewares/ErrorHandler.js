@@ -1,4 +1,4 @@
 module.exports = (err,req,res,next) => {
-    console.log('err ' + err);
+    console.log(err);
     res.status(500).send('Server error detected.');
 }
