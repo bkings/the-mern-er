@@ -38,7 +38,9 @@ schema.methods.generateToken = function () {
         userName: this.userName,
         status: this.status
     }
-    const token = jwt.sign(payload, config.get("jwtPrivateKey"));
+    const token = jwt.sign(payload, config.get("jwtPrivateKey"), {
+        expiresIn: 3600
+    });
     return token;
 }
 

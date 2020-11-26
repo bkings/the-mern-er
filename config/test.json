@@ -1,0 +1,3 @@
+{
+    "databaseConnection":"mongodb://localhost/registration_tests"
+}
