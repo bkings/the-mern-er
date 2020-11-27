@@ -31,7 +31,7 @@ const schema = new mongoose.Schema({
     }
 });
 
-const FiscalYear = mongoose.model('FiscalYear', schema);
+const FiscalYear = mongoose.model('fiscal_year', schema);
 
 const validate = fiscalYear => {
     const schema = Joi.object({
