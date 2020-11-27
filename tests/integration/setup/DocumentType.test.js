@@ -2,17 +2,28 @@ const request = require('supertest');
 const { DocumentType } = require('../../../models/setup/DocumentType');
 const { User } = require('../../../models/utility/User');
 
-let server;
+let server, token, docType, docName;
 
 describe('/api/documentType', () => {
     beforeEach(() => {
-        server = require('../../../index')
+        server = require('../../../index');
+        token = new User().generateToken();
     });
 
     afterEach(async () => {
         await server.close();
         await DocumentType.deleteMany();
     });
+
+    execPost = () => {
+        return request(server)
+            .post('/api/documentType')
+            .set('x-token', token)
+            .send({
+                docType,
+                docName
+            });
+    }
 
     describe('GET', () => {
         it('should return all document types', async () => {
@@ -37,13 +48,22 @@ describe('/api/documentType', () => {
 
     describe('POST', () => {
         it('should return 401 if user is unauthorized', async () => {
-            const res = await request(server)
-                .post('/api/documentType')
-                .send({
-                    docType: "PP",
-                    docName: "Passport"
-                });
+            docType = "PP", docName = "Passport", token = "";
+            const res = await execPost();
             expect(res.status).toBe(401);
-        })
+        });
+
+        it('should return 400 if doctype length is less than 1', async () => {
+            docType = "", docName = "Name of doc";
+            const res = await execPost();
+            expect(res.status).toBe(400);
+        });
+
+        it('should return 400 if doctype length is more than 3', async () => {
+            docType = "ABCD", docName = "Name of doc";
+            const res = await execPost();
+            expect(res.status).toBe(400);
+        });
+
     })
 })

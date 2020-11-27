@@ -18,7 +18,8 @@ const validate = body => {
     const schema = Joi.object({
         docType: Joi.string().min(1).max(3),
         docName: Joi.string().required()
-    })
+    });
+    return schema.validate(body);
 }
 
 exports.DocumentType = DocumentType;
