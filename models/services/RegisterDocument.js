@@ -1,6 +1,6 @@
 const Joi = require('joi');
 const mongoose = require('mongoose');
-const { DocumentType } = require('../../models/setup/DocumentType');
+const { documentSchema } = require('../../models/setup/DocumentType');
 
 const schema = new mongoose.Schema({
     regNo: {
@@ -29,7 +29,7 @@ const schema = new mongoose.Schema({
         type: Date,
         required: true
     },
-    // documentType: DocumentType,
+    documentType: documentSchema,
     phone: {
         type: String
     },
@@ -47,7 +47,7 @@ const validate = (req) => {
         lastName: Joi.string().required(),
         dateOfBirth: Joi.string().required(),
         enterDate: Joi.string().required(),
-        // documentType: Joi.objectId().required(),
+        documentType: Joi.objectId().required(),
         phone: Joi.string()
     });
     return schema.validate(req);

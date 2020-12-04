@@ -22,5 +22,6 @@ const validate = body => {
     return schema.validate(body);
 }
 
+exports.documentSchema = schema;
 exports.DocumentType = DocumentType;
 exports.validate = validate;
