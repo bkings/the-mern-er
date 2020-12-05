@@ -1,6 +1,5 @@
 const Joi = require('joi');
 const mongoose = require('mongoose');
-const { documentSchema } = require('../../models/setup/DocumentType');
 
 const schema = new mongoose.Schema({
     regNo: {
@@ -29,12 +28,24 @@ const schema = new mongoose.Schema({
         type: Date,
         required: true
     },
-    documentType: documentSchema,
+    documentType: {
+        type: new mongoose.Schema({
+            docType: {
+                type: String,
+                required: true,
+                minlength: 1,
+                maxlength: 3
+            },
+            docName: String
+        }),
+        required: true
+    },
     phone: {
         type: String
     },
     fiscalYear: {
-
+        type: Number,
+        required: true
     }
 });
 
@@ -48,7 +59,8 @@ const validate = (req) => {
         dateOfBirth: Joi.string().required(),
         enterDate: Joi.string().required(),
         documentType: Joi.objectId().required(),
-        phone: Joi.string()
+        phone: Joi.string(),
+        fiscalYear: Joi.number().required()
     });
     return schema.validate(req);
 }

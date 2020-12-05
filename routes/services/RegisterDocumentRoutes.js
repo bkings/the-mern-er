@@ -3,18 +3,17 @@ const auth = require('../../middlewares/Authorization');
 const express = require('express');
 const router = express.Router();
 const { RegisterDocument, validate } = require('../../models/services/RegisterDocument');
-const { FiscalYear } = require('../../models/setup/FiscalYear');
 const { validateReqBody } = require('../../middlewares/Validation');
 const { DocumentType } = require('../../models/setup/DocumentType');
 
+router.get('/', [auth], async (req, res) => {
+    const registerDocuments = await RegisterDocument.find().sort('-enterDate');
+    res.send({ "data": registerDocuments });
+})
+
 router.post('/', [auth, validateReqBody(validate)], async (req, res) => {
     let regNo, fy, snArr, sn;
-    try {
-        fy = (await FiscalYear.findOne({ status: 'Y' }).select('yearCode')).yearCode;
-    } catch (error) {
-        return res.status(400).send({ "error": "Active Fiscal Year not set." });
-    }
-
+    fy = req.body.fiscalYear;
     const documentType = await DocumentType.findById(req.body.documentType).select('docType docName');
     if (!documentType) return res.status(400).send({ "error": "Invalid document type." });
     req.body.documentType = documentType;
@@ -40,7 +39,7 @@ router.post('/', [auth, validateReqBody(validate)], async (req, res) => {
     }
     req.body.regNo = regNo;
     req.body.sn = sn;
-    const registerDocument = new RegisterDocument(_.pick(req.body, ['regNo', 'firstName', 'middleName', 'lastName', 'dateOfBirth', 'enterDate', 'phone', 'sn', 'documentType']));
+    const registerDocument = new RegisterDocument(_.pick(req.body, ['regNo', 'firstName', 'middleName', 'lastName', 'dateOfBirth', 'enterDate', 'phone', 'sn', 'documentType', 'fiscalYear']));
     await registerDocument.save();
     res.send({ "message": "Success" });
 });
