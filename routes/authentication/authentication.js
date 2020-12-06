@@ -15,7 +15,7 @@ router.post("/", async (req, res) => {
     if (!validPwd) return res.status(400).send({ "error": "Invalid username or password." });
 
     const token = user.generateToken();
-    res.status(200).send({ "message": "Login Success.", "token": token });
+    res.status(200).send({ "message": "Login Success.", "token": token, "expiresIn": 3600 });
 
 });
 
