@@ -7,7 +7,7 @@ const { validateReqBody } = require('../../middlewares/Validation');
 const { DocumentType } = require('../../models/setup/DocumentType');
 
 router.get('/', [auth], async (req, res) => {
-    const registerDocuments = await RegisterDocument.find().sort('-enterDate');
+    const registerDocuments = await RegisterDocument.find().sort('-regNo');
     res.send({ "data": registerDocuments });
 })
 
